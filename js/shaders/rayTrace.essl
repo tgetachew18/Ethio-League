@@ -1,0 +1,27 @@
+shaderSource[document.currentScript.src.split('js/shaders/')[1]] = `
+	precision highp float;
+	varying vec2 texCoord;
+	varying vec3 color;
+	uniform samplerCube envmapTexture;
+	uniform sampler2D colorTexture;
+	varying vec3 rayDir;
+	varying vec3 worldNormal;
+	varying vec4 worldPos;
+	varying vec4 eyepos;
+	varying vec4 rayDir;
+
+	float intersection(vec4 raydir, vec4 eyepos){
+		vec3 result = -eyepos.x/rayDir.x;
+		return result;
+	}
+
+	void main(void) {
+		vec2 texCoord = vec2(0.5, 0.5) + normalize(normalize(rayDir) + vec3(0, 0, 1)).xy * vec2(0.5, -0.5);
+		float t = intersection(rayDir, eyepos.xyz);
+		vec3 final = (eyepos + raydir*t, eyepos + rayDir*t, eyepos + rayDir*t);
+		gl_FragColor =texture2D(colorTexture, texCoord);
+
+	}
+`;
+
+

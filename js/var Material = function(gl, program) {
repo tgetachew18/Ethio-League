@@ -1,0 +1,23 @@
+var Material = function(gl, program) { 
+  this.gl = gl; 
+  this.program = program; 
+  var theMaterial = this; 
+  Object.keys(program.uniforms).forEach(function(uniformName) { 
+    var uniform = program.uniforms[uniformName]; 
+    var reflectionVariable =
+        UniformReflectionFactories.makeVar(gl, uniform.type,
+                   uniform.arraySize, uniform.textureUnit);
+    // TODO: shared uniforms
+    Object.defineProperty(theMaterial, uniformName,
+      {value: reflectionVariable} ); 
+  }); 
+Material.prototype.commit = function() { 
+  var gl = this.gl; 
+  this.program.commit(); 
+  var theMaterial = this; 
+  Object.keys(this.program.uniforms).forEach( function(uniformName) { 
+    var uniform = theMaterial.program.uniforms[uniformName]; 
+    // TODO: shared uniforms
+    theMaterial[uniformName].commit(gl, uniform.location); 
+  }); 
+};M

@@ -1,0 +1,23 @@
+
+
+shaderSource[document.currentScript.src.split('js/shaders/')[1]] = `
+	precision highp float;
+	varying vec2 texCoord;
+	varying vec3 color;
+	uniform samplerCube envmapTexture;
+	uniform vec4 lightPowerDensity[1];
+	uniform vec3 lightPos[1];
+	//uniform sampler2D colorTexture;
+	varying vec3 worldNormal;
+	varying vec4 worldPos;
+	varying vec4 eyepos;
+	varying vec3 rayDir;
+
+	void main(void) {
+		vec3 eyevec = vec3(eyepos.xyz - worldPos.xyz);
+		vec3 reflDir = reflect(-normalize(eyevec), worldNormal);
+		//find corresponding point in light probe
+		vec3 probeTex = (normalize(-eyevec + reflDir) * 0.5).xyz	;//compute this from reflDir as in prev. slide
+		gl_FragColor = textureCube(envmapTexture, normalize(reflect(-eyevec, worldNormal)));//;texture2D( colorTexture, probeTex);
+	}
+`;

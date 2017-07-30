@@ -1,0 +1,33 @@
+shaderSource[document.currentScript.src.split('js/shaders/')[1]] = `
+	uniform vec3 quadPosition;
+	uniform mat4 modelViewProjMatrix;
+	uniform mat4 modelMatrix;
+	uniform mat4 rayDirMatrix;
+	uniform samplerCube envmapTexture;
+	uniform mat4 modelMatrixInverse;	
+	uniform vec3 eyePos;
+	attribute vec3 vertexPosition;
+	attribute vec2 vertexTexCoord;
+	attribute vec3 vertexNormal;
+	attribute vec3 vertexColor;
+	varying vec3 color;
+	varying vec2 texCoord;
+	varying vec3 worldNormal;
+	varying vec4 worldPos;
+	varying vec4 eyepos;
+	varying vec3 rayDir;
+
+
+
+
+	  	  
+	void main(void) {
+		vec4 position = vec4(vertexPosition, 1);
+		position.z = 0.99999;
+		gl_Position = position;//*modelViewProjMatrix;
+		rayDir = (vec4(vertexPosition,1) * rayDirMatrix).xyz;
+		color=vertexColor;
+		texCoord=vertexTexCoord;
+	}
+
+`;

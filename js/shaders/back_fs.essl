@@ -1,0 +1,16 @@
+shaderSource[document.currentScript.src.split('js/shaders/')[1]] = `
+	precision highp float;
+	varying vec2 texCoord;
+	varying vec3 color;
+	uniform samplerCube envmapTexture;
+	uniform sampler2D colorTexture;
+	varying vec3 rayDir;
+
+	void main(void) {
+	//	vec2 texCoord = vec2(0.5, 0.5) + normalize(normalize(rayDir) + vec3(0, 0, 1)).xy * vec2(0.5, -0.5);
+		gl_FragColor = textureCube(envmapTexture, rayDir);//texture2D(colorTexture, texCoord);
+
+	}
+`;
+
+
